@@ -24,7 +24,6 @@ function colcon_clean() {
         echo -e "The following directories will be ${red}deleted${reset}:"
 
         for dir_type in "build" "install"; do
-            #echo -e "  ${light_blue}$dir_type/${reset}"
             echo -e "  $dir_type/"
             for pattern in "${dirs_to_remove[@]}"; do
                 dirs=$(find $dir_type -maxdepth 1 -type d -name "$pattern" -print 2>/dev/null)
@@ -42,6 +41,8 @@ function colcon_clean() {
                 find install -maxdepth 1 -type d -name "$pattern" -exec rm -r {} +
             done
         fi
+    elif [[ "${#patterns[@]}" -eq "${#missing[@]}" && "${#patterns[@]}" -gt 0 ]]; then
+        echo -e "${yellow}No packages were found. Nothing will be deleted.${reset}"
     else
         echo -e "Both the ${light_blue}build${reset} and ${light_blue}install${reset} directories will be fully ${red}deleted${reset}."
         read -p "Are you sure you want to remove these? (y/n) " -n 1 -r; echo ""
